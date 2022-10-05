@@ -8,8 +8,9 @@
 
 knapsack_dynamic<- function(x, W){
   stopifnot(is.data.frame(x) || colnames(x) == c("w", "v"))
-  m= matrix(0, ncol= W+1, nrow=n+1)
   n= nrow(x)
+  m= matrix(0, ncol= W+1, nrow=n+1)
+
   weight=x[order(x[,1]), 1]
   value=x[order(x[,1]), 2]
 
@@ -65,14 +66,14 @@ knapsack_dynamic<- function(x, W){
 
 # knapsack_dynamic(x = knapsack_objects[1:800,], W = 3500)
 
-# How much time does it takes to run the algorithm for n = 1000000 objects?
+# How much time does it takes to run the algorithm for n = 500 objects?
 
 # knapsack_objects <-
 #   data.frame(
-#     w=sample(1:4000, size = 1000000, replace = TRUE),
-#     v=runif(n = 1000000, 0, 10000)
+#     w=sample(1:4000, size = 500, replace = TRUE),
+#     v=runif(n = 500, 0, 10000)
 #   )
-
+#
 # time_check <- function(){
 #           a <-Sys.time()
 #           knapsack_dynamic(x = knapsack_objects, W = 2000)
@@ -80,4 +81,4 @@ knapsack_dynamic<- function(x, W){
 #           return(b-a)
 #   }
 # test.function()
-# Time difference of 0.1946259 secs
+# 0.001940012 secs
