@@ -73,12 +73,12 @@ knapsack_dynamic<- function(x, W){
 #     w=sample(1:4000, size = 500, replace = TRUE),
 #     v=runif(n = 500, 0, 10000)
 #   )
-#
+# #
 # time_check <- function(){
 #           a <-Sys.time()
 #           knapsack_dynamic(x = knapsack_objects, W = 2000)
 #           b <-Sys.time()
 #           return(b-a)
 #   }
-# test.function()
-# 0.001940012 secs
+
+# Time difference of 0.5400019 secs

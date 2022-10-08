@@ -49,13 +49,13 @@ greedy_knapsack<- function(x, W){
 #     w=sample(1:4000, size = 1000000, replace = TRUE),
 #     v=runif(n = 1000000, 0, 10000)
 #   )
-
+#
 # time_check <- function(){
 #           a <-Sys.time()
 #           greedy_knapsack(x = knapsack_objects, W = 2000)
 #           b <-Sys.time()
 #           return(b-a)
 #   }
-# test.function()
-# Time difference of 0.2324789 secs
+
+# Time difference of 0.1925881 secs
 
