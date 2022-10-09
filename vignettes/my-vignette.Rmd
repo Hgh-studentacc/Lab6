@@ -1,0 +1,94 @@
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Lab6)
+RNGversion(min(as.character(getRversion()),"3.5.3"))
+set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+n <- 10000000
+knapsack_objects <- data.frame(
+  w=sample(1:4000, size = n, replace = TRUE),
+  v=runif(n = n, 0, 10000)
+)
+```
+### Section 1: Knapsack problem
+As requested in assignment the main objective in this task is to solve knapsack problem using three famous algorithms.
+In order to explain the working of this package. We describe the included funcions in three separate sections:
+
+##Brute Force
+
+1-we calculate best solution using exhaustive search also known as brute force method, here we use "microbenchmark" package to measure the speed of functions. For larger samples a significant decrease in speed can be seen:
+
+```{r ,echo=FALSE}
+library(microbenchmark)
+microbenchmark(brute_force_knapsack(knapsack_objects[1:8,],3500),brute_force_knapsack(knapsack_objects[1:16,],3500))
+```
+
+##Greedy Search
+
+2-In this step, a heuristic algorithm known as "Greedy search" was implemented, As it can be observed this method is much faster compared to the previous method
+for n=1000000, it takes a minimum of 161600.2 microseconds to reach optimal solutions:
+
+```{r ,echo=FALSE}
+microbenchmark(greedy_knapsack(knapsack_objects[1:8,],3500),greedy_knapsack(knapsack_objects[1:1000000,],3500))
+```
+
+This function is much faster compared to previous step and much more effiecient in larger scales.
+
+##Dynamic programming
+
+3-In order to apply dynamic programming in a solver or algorithm we need to have a problem with two key attributes: optimal substructure and overlapping sub-problems. As it can be seen this method is still faster than the brute force mentioned in step 1
+
+```{r ,echo=FALSE}
+microbenchmark(knapsack_dynamic(knapsack_objects[1:8,],3500),knapsack_dynamic(knapsack_objects[1:500,],3500))
+```
+
+##profiling the code
+
+4-By using the package profvis, we can find better ways to solve our problems and simultaneously increase the speed:
+
+```{r ,echo=FALSE}
+library(profvis)
+```
+
+By running this library and function profvis::profvis() we can see some bottlenecks in our code. For example second nested loop in brute force function is taking 70 ms to run through elemts. In order to optimize performance we need to replace loops in our knapsack functions with highly optimized native R versions(lapply,sapply,...). It's also possible to use alternative prgramming solutions such as Memoization to improve speed or Use C++ programming to significantly improve speed(as we did for step 1).
+
+##Section 2: Todo
+
+1- In the next version C++ code needs to be optimized further, as Parallelization should be implemented to achieve maximum performance.
+
+2- An effective,stable method of improving the speed in greedy algorithm should be researched. This algroithm is implemented to simplify the process of searching for solution, but better time complexity might be available here.
+
+##Section 3: Some Note for the furure
+
+1-Vignette in R runs on pure environment. What this means to us is simple: in order to run external packages, data, or codes we need to add it to current environment. Using system.file command does not help much here unless we install the package and load the files using bellow command:
+
+```{r ,echo=FALSE}
+#system.file("../path/to/file",package="name")
+```
+
+Another workaround is to make use of httr package and get the file from an online repository or upload center:
+
+```{r, echo=FALSE}
+#url1=""
+#GET(url1, write_disk(tfile1 <- tempfile(fileext = ".xx")))
+```
+
+Note that above command write file to the temp file, so the user needs to be cautious of potential problems.
+
+2-Developers need to beware of exporting functions from C++ to Rcpp framework. One of the potential issues here might be because of internal syntax. It's not exactly possible to export all custom data types(or Data Structures). The best practice here is to use as many native R types as possible(In our case, "NumericMatrix" was used).
+
+3-Beware of your C++ comments! for strange reasons, it's not possible to export functions if anything is added between "// [[Rcpp::export]]" and the primary function. 

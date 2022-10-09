@@ -13,7 +13,11 @@ brute_force_knapsack=function(x,W,methhod="Not_so_fast"){
 
   MrHankMufflin = list()
   if (methhod=="fast"){
-    Rcpp::sourceCpp(system.file("src/knapsack_brute_force.cpp", package="Lab6"))
+    url1="https://raw.githubusercontent.com/Hgh-studentacc/personal_uploads/main/knapsack_brute_force.cpp"
+    httr::GET(url1, httr::write_disk(tfile1 <- tempfile(fileext = ".cpp")))
+    Rcpp::sourceCpp(tfile1)
+    #Rcpp::sourceCpp(system.file("Extra/knapsack_brute_force.cpp", package="Lab6"))
+    return(bruteforce_knapsack(x[[1]],x[[2]],W,nrow(x[1])))
   } else {
     W_max=W
     max_P=0
