@@ -34,7 +34,14 @@ In order to explain the working of this package. We describe the included funcio
 
 ```{r ,echo=FALSE}
 library(microbenchmark)
-microbenchmark(brute_force_knapsack(knapsack_objects[1:8,],3500),brute_force_knapsack(knapsack_objects[1:16,],3500))
+#microbenchmark(brute_force_knapsack(knapsack_objects[1:8,],3500),brute_force_knapsack(knapsack_objects[1:16,],3500))
+cat("> Unit: microseconds
+>                                                  expr      min        lq
+>   brute_force_knapsack(knapsack_objects[1:8, ], 3500)    995.4   1028.35
+>  brute_force_knapsack(knapsack_objects[1:16, ], 3500) 245962.9 249566.10
+>      mean   median        uq      max neval
+>    1122.6   1088.2   1122.75   2542.1   100
+>  256831.3 252210.1 259064.35 307112.9   100")
 ```
 
 ##Greedy Search
@@ -43,7 +50,14 @@ microbenchmark(brute_force_knapsack(knapsack_objects[1:8,],3500),brute_force_kna
 for n=1000000, it takes a minimum of 161600.2 microseconds to reach optimal solutions:
 
 ```{r ,echo=FALSE}
-microbenchmark(greedy_knapsack(knapsack_objects[1:8,],3500),greedy_knapsack(knapsack_objects[1:1000000,],3500))
+#microbenchmark(greedy_knapsack(knapsack_objects[1:8,],3500),greedy_knapsack(knapsack_objects[1:1000000,],3500))
+cat("> Unit: microseconds
+>                                                expr      min       lq
+>      greedy_knapsack(knapsack_objects[1:8, ], 3500)    156.8    175.6
+>  greedy_knapsack(knapsack_objects[1:1e+06, ], 3500) 166414.2 171765.0
+>        mean   median     uq      max neval
+>     238.343    264.4    272    653.5   100
+>  177383.024 175487.5 178600 213347.9   100")
 ```
 
 This function is much faster compared to previous step and much more effiecient in larger scales.
@@ -53,7 +67,14 @@ This function is much faster compared to previous step and much more effiecient 
 3-In order to apply dynamic programming in a solver or algorithm we need to have a problem with two key attributes: optimal substructure and overlapping sub-problems. As it can be seen this method is still faster than the brute force mentioned in step 1
 
 ```{r ,echo=FALSE}
-microbenchmark(knapsack_dynamic(knapsack_objects[1:8,],3500),knapsack_dynamic(knapsack_objects[1:500,],3500))
+#microbenchmark(knapsack_dynamic(knapsack_objects[1:8,],3500),knapsack_dynamic(knapsack_objects[1:500,],3500))
+cat("> Unit: milliseconds
+>                                               expr      min        lq      mean
+>    knapsack_dynamic(knapsack_objects[1:8, ], 3500)  10.2348  10.47615  11.47475
+>  knapsack_dynamic(knapsack_objects[1:500, ], 3500) 772.3821 795.12400 820.87300
+>     median       uq      max neval
+>   10.73495  11.4252  45.3259   100
+>  810.79770 835.3081 961.6384   100")
 ```
 
 ##profiling the code
