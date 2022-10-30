@@ -6,6 +6,9 @@
 #' @return A list with optimal value and selected elements
 #' @useDynLib Lab6
 #' @import Rcpp
+#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp evalCpp
+#' @exportPattern "^[[:alpha:]]+"
 #' @export
 
 

@@ -7,9 +7,10 @@ using namespace Rcpp;
 
 // set_of_weight is a vector of weights, set_of_profit is a vector of profits, and W_max is the maximum weight inputted
 // from R IDE. And the function returns the maximum profit that can be obtained from the given set of weights and profits.
+//' @export
 // [[Rcpp::export]]
 
-double bruteforce_knapsack(NumericMatrix set_of_weight, NumericMatrix set_of_profit, int W_max, int R_number)
+double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_profit, int W_max, int R_number)
 {
     int k, j, total_profit, total_weight, max_weight, max_profit, max_set[R_number];
     int set_counter;

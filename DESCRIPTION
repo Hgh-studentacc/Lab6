@@ -19,5 +19,6 @@ Suggests:
     testthat (>= 3.0.0)
 Imports: Rcpp(>= 1.0.9)
 LinkingTo: Rcpp
+NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr
