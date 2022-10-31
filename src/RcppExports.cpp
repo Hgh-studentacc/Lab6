@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // bruteforce_knapsack
-double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_profit, int W_max, int R_number);
+List bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_profit, int W_max, int R_number);
 RcppExport SEXP _Lab6_bruteforce_knapsack(SEXP set_of_weightSEXP, SEXP set_of_profitSEXP, SEXP W_maxSEXP, SEXP R_numberSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

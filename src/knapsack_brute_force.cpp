@@ -7,16 +7,24 @@ using namespace Rcpp;
 
 // set_of_weight is a vector of weights, set_of_profit is a vector of profits, and W_max is the maximum weight inputted
 // from R IDE. And the function returns the maximum profit that can be obtained from the given set of weights and profits.
+//' Brute Force method(exhaustive search) to solve knapsack problem in C++
+//' @param set_of_weight weights
+//' @param set_of_profit profits
+//' @param W_max maximum weight
+//' @param R_number passed from R
+//' @return A list with optimal value and selected elements
 //' @export
 // [[Rcpp::export]]
 
-double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_profit, int W_max, int R_number)
+List bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_profit, int W_max, int R_number)
 {
-    int k, j, total_profit, total_weight, max_weight, max_profit, max_set[R_number];
+    int k, j, total_weight, max_weight, max_set[R_number];
     int set_counter;
-
+    float max_profit,total_profit;
+    NumericVector vectlent,vectcevt;
     // Number of possible combinations
     int number_of_subsets = pow(2.0, R_number);
+    int sj=0;
 
 
     total_profit = 0;
@@ -26,11 +34,14 @@ double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_pro
     //set_counter is the counter for the number of subsets
     set_counter = 0;
 
+    vectcevt=NumericVector::create(0);
     // k is the counter for the number of bits in the binary number
     for(k=0; k<number_of_subsets; k++)
     {
+      vectlent=NumericVector::create(0);
         //std::cout << "k = " << k << std::endl;
         //R_number is the number of items from R IDE
+
         for (j = 0; j < R_number; j++) {
         //This loop calculates the total weight of the items to be included in the knapsack
         //std::cout << "j = " << j << std::endl;
@@ -41,8 +52,13 @@ double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_pro
                 total_weight = total_weight + set_of_weight[j];
                 //setting the counter
                 max_set[set_counter - 1] = j + 1;
-            }
+                sj=j+1;
+                vectlent.push_back(sj);
+                //vectlent.push_back(total_profit);
+                }
+
         }
+
         //std::cout << "set_counter: " << set_counter << std::endl;
         //std::cout << "total_profit: " << total_profit << std::endl;
 
@@ -56,6 +72,8 @@ double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_pro
                 //why don't we calculate the difference between total_profit and max_weight?
                 max_weight = total_weight;
                 max_profit = total_profit;
+                vectcevt=vectlent;
+                vectcevt.push_back(total_weight);
             }
         }
         // reset the counters to prepare for next set
@@ -64,6 +82,9 @@ double bruteforce_knapsack(NumericVector set_of_weight, NumericVector set_of_pro
         set_counter = 0;
     }
 
-    return max_profit;
-
+    vectcevt.erase(0);
+    vectcevt.erase(vectcevt.length());
+    List Liopy = List::create(Named("value") =  std::round(max_profit), Named("elements") = vectcevt);
+    //return std::round(max_profit);
+    return Liopy;
 }

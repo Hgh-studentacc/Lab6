@@ -42,6 +42,17 @@ cat("> Unit: microseconds
 >      mean   median        uq      max neval
 >    1122.6   1088.2   1122.75   2542.1   100
 >  256831.3 252210.1 259064.35 307112.9   100")
+
+cat("Cpp brute force: ")
+#microbenchmark(brute_force_knapsack(knapsack_objects[1:8,],3500, methhod = "fast"),brute_force_knapsack(knapsack_objects[1:16,],3500,methhod = "fast"))
+cat("Unit: microseconds
+                                                                   expr      min
+  brute_force_knapsack(knapsack_objects[1:8, ], 3500, methhod = \"fast\")    296.9
+ brute_force_knapsack(knapsack_objects[1:16, ], 3500, methhod = \"fast\") 100035.4
+       lq       mean    median        uq      max neval
+    313.8    486.387    365.45    418.15  12137.7   100
+ 107982.4 139181.084 124598.65 167211.45 254897.1   100")
+
 ```
 
 ##Greedy Search
