@@ -40,13 +40,6 @@ greedy_knapsack_improved <- function(x, W) {
               colnames(x) == c("w", "v") || is.data.frame(W))
   
   sorted_x = x[order(x$v / x$w, decreasing = TRUE),]
-  #rewrite this while using c++
-  # while (temp<W) {
-  #   i=i+1
-  #   a= sum(sorted_x$v[1:i])
-  #   temp= sum(sorted_x$w[1:i])
-  #   b[i]= rownames(sorted_x)[i]  }
-  
   
   tempoD = dist(sorted_x$v, sorted_x$w, W, as.numeric(row.names(sorted_x)),as.integer(nrow(x)))
   result = list(value = round(tempoD$a - sorted_x$v[tempoD$i], 0),
