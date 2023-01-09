@@ -10,20 +10,8 @@
 #' @importFrom Rcpp evalCpp
 #' @export
 
-greedy_knapsack_improved <- function(x, W) {
-  stopifnot(is.data.frame(x) ||
-              colnames(x) == c("w", "v") || is.data.frame(W))
-  
-  sorted_x = x[order(x$v / x$w, decreasing = TRUE),]
-  #rewrite this while using c++
-  # while (temp<W) {
-  #   i=i+1
-  #   a= sum(sorted_x$v[1:i])
-  #   temp= sum(sorted_x$w[1:i])
-  #   b[i]= rownames(sorted_x)[i]  }
-  
-  cppFunction(
-    'List dist(NumericVector v, NumericVector w, int W, NumericVector names) {
+cppFunction(
+  'List dist(NumericVector v, NumericVector w, int W, NumericVector names) {
 
   int n = v.size();  //so that our vector get optimal size
 
@@ -44,7 +32,21 @@ greedy_knapsack_improved <- function(x, W) {
   L = List::create(Named("a") = a, Named("b") = names,Named("i") = i);
   return L;
   }'
-  )
+)
+
+greedy_knapsack_improved <- function(x, W) {
+  stopifnot(is.data.frame(x) ||
+              colnames(x) == c("w", "v") || is.data.frame(W))
+  
+  sorted_x = x[order(x$v / x$w, decreasing = TRUE),]
+  #rewrite this while using c++
+  # while (temp<W) {
+  #   i=i+1
+  #   a= sum(sorted_x$v[1:i])
+  #   temp= sum(sorted_x$w[1:i])
+  #   b[i]= rownames(sorted_x)[i]  }
+  
+  
   tempoD = dist(sorted_x$v, sorted_x$w, W, as.numeric(row.names(sorted_x)))
   result = list(value = round(tempoD$a - sorted_x$v[tempoD$i], 0),
                 elements = as.numeric(tempoD$b[1:(tempoD$i - 1)]))
