@@ -30,7 +30,7 @@ cppFunction(
 
   Rcpp::NumericVector b_vec(b, b + i); // convert b array to vector at last
   
-  L = List::create(Named("a") = a, Named("b") = names,Named("i") = i);
+  L = List::create(Named("a") = a, Named("b") = b_vec,Named("i") = i);
   return L;
   }'
 )
