@@ -24,7 +24,7 @@ cppFunction(
   while (temp < W) {
     a+=v[i];
     temp+=w[i];
-    b.push_back(names[i]);
+    b[i]=(names[i]);
     i++;
   }
 
@@ -60,6 +60,6 @@ greedy_knapsack_improved <- function(x, W) {
 #      w=sample(1:4000, size = n, replace = TRUE),
 #      v=runif(n = n, 0, 10000)
 #    )
-#
+
 #  greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
 greedy_knapsack_improved(x = knapsack_objects[1:800,], W = 3500)
