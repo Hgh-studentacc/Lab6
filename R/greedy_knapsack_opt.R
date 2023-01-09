@@ -11,14 +11,14 @@
 #' @export
 
 cppFunction(
-  'List dist(NumericVector v, NumericVector w, int W, NumericVector names) {
+  'List dist(NumericVector v, NumericVector w, int W, NumericVector names, int fn) {
 
-  int n = v.size();  //so that our vector get optimal size
+  const int MAX_ITEMS = fn;  //use array instead
 
   int i = 0;
   int a = 0;
   int temp=0;
-  NumericVector b(n);
+  int b[MAX_ITEMS];
   List L;
 
   while (temp < W) {
@@ -28,7 +28,8 @@ cppFunction(
     i++;
   }
 
-
+  Rcpp::NumericVector b_vec(b, b + i); // convert b array to vector at last
+  
   L = List::create(Named("a") = a, Named("b") = names,Named("i") = i);
   return L;
   }'
@@ -47,7 +48,7 @@ greedy_knapsack_improved <- function(x, W) {
   #   b[i]= rownames(sorted_x)[i]  }
   
   
-  tempoD = dist(sorted_x$v, sorted_x$w, W, as.numeric(row.names(sorted_x)))
+  tempoD = dist(sorted_x$v, sorted_x$w, W, as.numeric(row.names(sorted_x)),as.integer(nrow(x)))
   result = list(value = round(tempoD$a - sorted_x$v[tempoD$i], 0),
                 elements = as.numeric(tempoD$b[1:(tempoD$i - 1)]))
   return(result)
