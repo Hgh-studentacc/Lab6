@@ -10,56 +10,54 @@
 #' @importFrom Rcpp evalCpp
 #' @export
 
-greedy_knapsack_improved<- function(x, W){
-  stopifnot(is.data.frame(x) || colnames(x) == c("w", "v")|| is.data.frame(W))
+greedy_knapsack_improved <- function(x, W) {
+  stopifnot(is.data.frame(x) ||
+              colnames(x) == c("w", "v") || is.data.frame(W))
+  
+  sorted_x = x[order(x$v / x$w, decreasing = TRUE),]
+  #rewrite this while using c++
+  # while (temp<W) {
+  #   i=i+1
+  #   a= sum(sorted_x$v[1:i])
+  #   temp= sum(sorted_x$w[1:i])
+  #   b[i]= rownames(sorted_x)[i]  }
+  
+  cppFunction(
+    'List dist(NumericVector v, NumericVector w, int W, NumericVector names) {
 
-  sorted_x= x[order(x$v/x$w, decreasing = TRUE), ]
-  i=0
-  temp= 0
-  a= vector()
-  b= vector()
-#rewrite this while using c++
-  while (temp<W) {
-    i=i+1
-    a= sum(sorted_x$v[1:i])
-    temp= sum(sorted_x$w[1:i])
-    b[i]= rownames(sorted_x)[i]
+  int n = v.size();  //so that our vector get optimal size
 
+  int i = 0;
+  int a = 0;
+  int temp=0;
+  NumericVector b(n);
+  List L;
+
+  while (temp < W) {
+    a+=v[i];
+    temp+=w[i];
+    b.push_back(names[i]);
+    i++;
   }
 
-  result= list(value= round(a-sorted_x$v[i],0), elements= as.numeric(b[1:(i-1)]))
+
+  L = List::create(Named("a") = a, Named("b") = names,Named("i") = i);
+  return L;
+  }'
+  )
+  tempoD = dist(sorted_x$v, sorted_x$w, W, as.numeric(row.names(sorted_x)))
+  result = list(value = round(tempoD$a - sorted_x$v[tempoD$i], 0),
+                elements = as.numeric(tempoD$b[1:(tempoD$i - 1)]))
   return(result)
 }
 
 
-# RNGversion(min(as.character(getRversion()),"3.5.3"))
-#
-# ##old sampler used for backward compatibility
-# ## suppressWarnings() can be used so that the above warning is not displayed
-# set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
 # n <- 2000
 # knapsack_objects <-
-#   data.frame(
-#     w=sample(1:4000, size = n, replace = TRUE),
-#     v=runif(n = n, 0, 10000)
-#   )
-
-# greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
-
-# How much time does it takes to run the algorithm for n = 1000000 objects?
-
-# knapsack_objects <-
-#   data.frame(
-#     w=sample(1:4000, size = 1000000, replace = TRUE),
-#     v=runif(n = 1000000, 0, 10000)
-#   )
+#    data.frame(
+#      w=sample(1:4000, size = n, replace = TRUE),
+#      v=runif(n = n, 0, 10000)
+#    )
 #
-# time_check <- function(){
-#           a <-Sys.time()
-#           greedy_knapsack(x = knapsack_objects, W = 2000)
-#           b <-Sys.time()
-#           return(b-a)
-#   }
-
-# Time difference of 0.1925881 secs
-
+#  greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
+greedy_knapsack_improved(x = knapsack_objects[1:800,], W = 3500)
